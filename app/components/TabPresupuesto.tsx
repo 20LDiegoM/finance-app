@@ -184,6 +184,19 @@ export default function TabPresupuesto({ data }: { data: FinanceData }) {
           })}
         </div>
 
+        {/* Total percentage */}
+        {hasIncome && (() => {
+          const totalBucketPct = bucketData.reduce((s, b) => s + (b.totalCrc / totalIncome) * 100, 0)
+          return (
+            <div className="border-t border-app-border mt-3 pt-3 flex items-center justify-between px-1">
+              <span className="text-[11px] font-medium text-app-text-2 uppercase tracking-wider">Total asignado</span>
+              <span className={`font-fin text-xs font-semibold ${Math.abs(totalBucketPct - 100) < 0.2 ? 'text-app-teal' : 'text-app-text-2'}`}>
+                {totalBucketPct.toFixed(1)}%
+              </span>
+            </div>
+          )
+        })()}
+
         {/* Unassigned types */}
         {unassigned.length > 0 && (
           <div className="mt-4 pt-4 border-t border-app-border">
@@ -258,17 +271,30 @@ export default function TabPresupuesto({ data }: { data: FinanceData }) {
               <span className={`text-sm font-medium ${remainingCrc >= 0 ? 'text-app-teal' : 'text-app-red'}`}>
                 {crc(remainingCrc)}
               </span>
+              <span className="ml-2 text-[11px] text-app-text-3 hidden sm:inline">{usd(remainingCrc / rate)}</span>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-app-border mt-2 pt-3 flex items-center justify-between px-3">
-          <span className="text-xs font-semibold text-app-text-2 uppercase tracking-wider">Total</span>
-          <div className="text-right font-fin">
-            <span className="text-base font-semibold text-app-text">{crc(totalIncome)}</span>
-            <span className="ml-2 text-[11px] text-app-text-3 hidden sm:inline">{usd(totalIncome / rate)}</span>
-          </div>
-        </div>
+        {/* Total percentage */}
+        {hasIncome && (() => {
+          const typesTotalPct = expensesByType.reduce((s, { totalCrc }) => s + (totalCrc / totalIncome) * 100, 0)
+            + (remainingCrc / totalIncome) * 100
+          return (
+            <div className="border-t border-app-border mt-2 pt-3 flex items-center justify-between px-3">
+              <span className="text-xs font-semibold text-app-text-2 uppercase tracking-wider">Total</span>
+              <div className="flex items-center gap-3">
+                <span className={`font-fin text-xs font-semibold ${Math.abs(typesTotalPct - 100) < 0.2 ? 'text-app-teal' : 'text-app-text-2'}`}>
+                  {typesTotalPct.toFixed(1)}%
+                </span>
+                <div className="text-right font-fin">
+                  <span className="text-base font-semibold text-app-text">{crc(totalIncome)}</span>
+                  <span className="ml-2 text-[11px] text-app-text-3 hidden sm:inline">{usd(totalIncome / rate)}</span>
+                </div>
+              </div>
+            </div>
+          )
+        })()}
       </section>
     </div>
   )

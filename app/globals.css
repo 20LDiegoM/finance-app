@@ -23,31 +23,31 @@
 
 /* ─── Light theme ─────────────────────────────────────────── */
 [data-theme="light"] {
-  --c-bg:          #F2EDE4;     /* crema cálido — fondo de página */
-  --c-surface:     #FAF7F2;     /* blanco cálido — cards */
-  --c-surface-2:   #EDE7DC;     /* ligeramente hundido — inputs */
-  --c-border:      #DDD5C8;     /* borde suave */
-  --c-border-2:    #C9BEB0;     /* borde enfatizado */
+  --c-bg:          #F4F6F9;     /* gris muy claro — fondo de página */
+  --c-surface:     #FFFFFF;     /* blanco puro — cards */
+  --c-surface-2:   #EDF0F4;     /* gris suave — inputs */
+  --c-border:      #DDE2EA;     /* borde frío claro */
+  --c-border-2:    #C8D0DC;     /* borde enfatizado */
 
-  /* Acento principal — oro más oscuro para contraste sobre claro */
-  --c-gold:        #8B6218;
-  --c-gold-dim:    rgba(139, 98, 24, 0.10);
+  /* Acento principal — turquesa para theme claro */
+  --c-gold:        #0B7A96;
+  --c-gold-dim:    rgba(11, 122, 150, 0.10);
 
-  --c-teal:        #077A5C;
-  --c-teal-dim:    rgba(7, 122, 92, 0.10);
+  --c-teal:        #0A7A5E;
+  --c-teal-dim:    rgba(10, 122, 94, 0.09);
 
-  --c-red:         #B83030;
-  --c-red-dim:     rgba(184, 48, 48, 0.10);
+  --c-red:         #C22B2B;
+  --c-red-dim:     rgba(194, 43, 43, 0.09);
 
-  --c-amber:       #9A5E0A;
-  --c-amber-dim:   rgba(154, 94, 10, 0.10);
+  --c-amber:       #A86200;
+  --c-amber-dim:   rgba(168, 98, 0, 0.09);
 
-  --c-blue:        #2054C0;
-  --c-blue-dim:    rgba(32, 84, 192, 0.10);
+  --c-blue:        #2550C8;
+  --c-blue-dim:    rgba(37, 80, 200, 0.09);
 
-  --c-text:        #1A1612;     /* casi negro cálido */
-  --c-text-2:      #6A6158;     /* gris cálido medio */
-  --c-text-3:      #B0A89E;     /* gris cálido claro */
+  --c-text:        #0D1117;     /* casi negro frío */
+  --c-text-2:      #566070;     /* gris medio */
+  --c-text-3:      #9AAABB;     /* gris claro */
 }
 
 @theme inline {

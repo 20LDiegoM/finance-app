@@ -335,12 +335,11 @@ export function useFinanceData() {
     const ahorroTypes = types.filter(t => t.bucket === 'ahorros')
     const gastosCrc = expenses.filter(e => gastoTypes.some(t => t.id === e.type_id)).reduce((s, e) => s + Number(e.amount_crc), 0)
     const ocioCrc = expenses.filter(e => ocioTypes.some(t => t.id === e.type_id)).reduce((s, e) => s + Number(e.amount_crc), 0)
-    const ahorroExpCrc = expenses.filter(e => ahorroTypes.some(t => t.id === e.type_id)).reduce((s, e) => s + Number(e.amount_crc), 0)
-    const ahorrosCrc = totalIncome - gastosCrc - ocioCrc - ahorroExpCrc + ahorroExpCrc
+    const ahorrosCrc = expenses.filter(e => ahorroTypes.some(t => t.id === e.type_id)).reduce((s, e) => s + Number(e.amount_crc), 0)
     return {
       gastos: { types: gastoTypes, totalCrc: gastosCrc },
       ocio: { types: ocioTypes, totalCrc: ocioCrc },
-      ahorros: { types: ahorroTypes, totalCrc: totalIncome - gastosCrc - ocioCrc },
+      ahorros: { types: ahorroTypes, totalCrc: ahorrosCrc },
     }
   })()
   const catName = (id: string | null) => categories.find(c => c.id === id)?.name || ''

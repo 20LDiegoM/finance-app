@@ -43,6 +43,7 @@ export default function TabGastos({ data }: { data: FinanceData }) {
   const [saving, setSaving] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({})
   const catRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLElement>(null)
 
@@ -266,88 +267,111 @@ export default function TabGastos({ data }: { data: FinanceData }) {
 
       {/* Expense list */}
       <section className="rounded-2xl border border-app-border bg-app-surface overflow-hidden">
-        {expensesByType.map(({ type, items, totalCrc }, idx) => (
-          <div key={type.id}>
-            {idx > 0 && <div className="mx-4 border-t border-app-border" />}
+        {expensesByType.map(({ type, items, totalCrc }, idx) => {
+          const isOpen = !collapsed[type.id]
+          const toggle = () => setCollapsed(prev => ({ ...prev, [type.id]: !prev[type.id] }))
 
-            {/* Type header */}
-            <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-app-gold shrink-0" />
-                <h3 className="text-xs font-semibold text-app-text uppercase tracking-wider">{type.name}</h3>
-              </div>
-              <div className="text-right font-fin">
-                <span className="text-sm font-medium text-app-text">{crc(totalCrc)}</span>
-                <span className="ml-2 text-xs text-app-text-2">{usd(totalCrc / rate)}</span>
-              </div>
-            </div>
-            <div className="px-4 pb-1 flex justify-end">
-              <span className="text-[11px] text-app-text-3 font-fin">Quincenal: {crc(totalCrc / 2)}</span>
-            </div>
+          return (
+            <div key={type.id}>
+              {idx > 0 && <div className="mx-4 border-t border-app-border" />}
 
-            {items.length > 0 ? (
-              <ul className="px-2 pb-2 space-y-0.5">
-                {items.map(e => {
-                  const d = expDisplay(e, rate)
-                  const isEditing = editingId === e.id
-                  const isDeleting = deletingId === e.id
-                  return (
-                    <li
-                      key={e.id}
-                      className={`flex items-center justify-between rounded-xl px-3 py-2.5 transition-all ${
-                        isEditing
-                          ? 'bg-app-blue/10 border border-app-blue/30'
-                          : 'hover:bg-app-surface-2'
-                      }`}
-                    >
-                      <div className="min-w-0 flex items-center gap-2 flex-wrap">
-                        <span className="text-sm text-app-text">{e.name}</span>
-                        {e.category_id && catName(e.category_id) && (
-                          <span className="rounded-full bg-app-border px-2 py-0.5 text-[10px] text-app-text-2">
-                            {catName(e.category_id)}
-                          </span>
-                        )}
-                        {e.account_id && accountName(e.account_id) && (
-                          <span className="rounded-full bg-app-gold/10 border border-app-gold/20 px-2 py-0.5 text-[10px] text-app-gold">
-                            {accountName(e.account_id)}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                        <div className="text-right font-fin">
-                          <span className="text-sm text-app-text">{d.primary}</span>
-                          <span className="ml-1.5 text-[11px] text-app-text-3 hidden sm:inline">{d.secondary}</span>
-                        </div>
-                        {isDeleting ? (
-                          <div className="w-7 h-7 flex items-center justify-center">
-                            <Spinner />
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-0.5 ml-1">
-                            <button
-                              onClick={() => startEdit(e)}
-                              className="flex items-center justify-center w-7 h-7 rounded-lg text-app-text-3 hover:text-app-blue hover:bg-app-blue/10 transition-all"
-                            >
-                              <EditIcon />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(e.id)}
-                              className="flex items-center justify-center w-7 h-7 rounded-lg text-app-text-3 hover:text-app-red hover:bg-app-red/10 transition-all"
-                            >
-                              <TrashIcon />
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    </li>
-                  )
-                })}
-              </ul>
-            ) : (
-              <p className="text-center py-4 text-[11px] text-app-text-3 uppercase tracking-wider">Sin gastos</p>
-            )}
-          </div>
-        ))}
+              {/* Type header — clickable */}
+              <button
+                onClick={toggle}
+                className="w-full px-4 pt-4 pb-2 flex items-center justify-between group cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <svg
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    className={`w-3 h-3 text-app-text-3 transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`}
+                  >
+                    <path d="M6.22 4.22a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 0 1-1.06-1.06L8.94 8 6.22 5.28a.75.75 0 0 1 0-1.06Z" />
+                  </svg>
+                  <span className="w-1.5 h-1.5 rounded-full bg-app-gold shrink-0" />
+                  <h3 className="text-xs font-semibold text-app-text uppercase tracking-wider">{type.name}</h3>
+                  {!isOpen && (
+                    <span className="text-[10px] text-app-text-3 font-fin ml-1">{items.length}</span>
+                  )}
+                </div>
+                <div className="text-right font-fin">
+                  <span className="text-sm font-medium text-app-text">{crc(totalCrc)}</span>
+                  <span className="ml-2 text-xs text-app-text-2">{usd(totalCrc / rate)}</span>
+                </div>
+              </button>
+
+              {isOpen && (
+                <>
+                  <div className="px-4 pb-1 flex justify-end">
+                    <span className="text-[11px] text-app-text-3 font-fin">Quincenal: {crc(totalCrc / 2)}</span>
+                  </div>
+
+                  {items.length > 0 ? (
+                    <ul className="px-2 pb-2 space-y-0.5">
+                      {items.map(e => {
+                        const d = expDisplay(e, rate)
+                        const isEditing = editingId === e.id
+                        const isDeleting = deletingId === e.id
+                        return (
+                          <li
+                            key={e.id}
+                            className={`flex items-center justify-between rounded-xl px-3 py-2.5 transition-all ${
+                              isEditing
+                                ? 'bg-app-blue/10 border border-app-blue/30'
+                                : 'hover:bg-app-surface-2'
+                            }`}
+                          >
+                            <div className="min-w-0 flex items-center gap-2 flex-wrap">
+                              <span className="text-sm text-app-text">{e.name}</span>
+                              {e.category_id && catName(e.category_id) && (
+                                <span className="rounded-full bg-app-border px-2 py-0.5 text-[10px] text-app-text-2">
+                                  {catName(e.category_id)}
+                                </span>
+                              )}
+                              {e.account_id && accountName(e.account_id) && (
+                                <span className="rounded-full bg-app-gold/10 border border-app-gold/20 px-2 py-0.5 text-[10px] text-app-gold">
+                                  {accountName(e.account_id)}
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                              <div className="text-right font-fin">
+                                <span className="text-sm text-app-text">{d.primary}</span>
+                                <span className="ml-1.5 text-[11px] text-app-text-3 hidden sm:inline">{d.secondary}</span>
+                              </div>
+                              {isDeleting ? (
+                                <div className="w-7 h-7 flex items-center justify-center">
+                                  <Spinner />
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-0.5 ml-1">
+                                  <button
+                                    onClick={() => startEdit(e)}
+                                    className="flex items-center justify-center w-7 h-7 rounded-lg text-app-text-3 hover:text-app-blue hover:bg-app-blue/10 transition-all"
+                                  >
+                                    <EditIcon />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDelete(e.id)}
+                                    className="flex items-center justify-center w-7 h-7 rounded-lg text-app-text-3 hover:text-app-red hover:bg-app-red/10 transition-all"
+                                  >
+                                    <TrashIcon />
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  ) : (
+                    <p className="text-center py-4 text-[11px] text-app-text-3 uppercase tracking-wider">Sin gastos</p>
+                  )}
+                </>
+              )}
+            </div>
+          )
+        })}
 
         {/* Total footer */}
         <div className="border-t border-app-border bg-app-surface-2 px-4 py-3">
