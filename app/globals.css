@@ -1,26 +1,266 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --c-bg: #0B0D13;
+  --c-surface: #111520;
+  --c-surface-2: #181C2A;
+  --c-border: #1E2338;
+  --c-border-2: #2A3050;
+  --c-gold: #C8A84B;
+  --c-gold-dim: rgba(200, 168, 75, 0.12);
+  --c-teal: #1ECFA4;
+  --c-teal-dim: rgba(30, 207, 164, 0.12);
+  --c-red: #E85454;
+  --c-red-dim: rgba(232, 84, 84, 0.12);
+  --c-amber: #DDA035;
+  --c-amber-dim: rgba(221, 160, 53, 0.12);
+  --c-blue: #4D8DF0;
+  --c-blue-dim: rgba(77, 141, 240, 0.12);
+  --c-text: #E8E4DA;
+  --c-text-2: #62677E;
+  --c-text-3: #333750;
+}
+
+/* ─── Light theme ─────────────────────────────────────────── */
+[data-theme="light"] {
+  --c-bg:          #F2EDE4;     /* crema cálido — fondo de página */
+  --c-surface:     #FAF7F2;     /* blanco cálido — cards */
+  --c-surface-2:   #EDE7DC;     /* ligeramente hundido — inputs */
+  --c-border:      #DDD5C8;     /* borde suave */
+  --c-border-2:    #C9BEB0;     /* borde enfatizado */
+
+  /* Acento principal — oro más oscuro para contraste sobre claro */
+  --c-gold:        #8B6218;
+  --c-gold-dim:    rgba(139, 98, 24, 0.10);
+
+  --c-teal:        #077A5C;
+  --c-teal-dim:    rgba(7, 122, 92, 0.10);
+
+  --c-red:         #B83030;
+  --c-red-dim:     rgba(184, 48, 48, 0.10);
+
+  --c-amber:       #9A5E0A;
+  --c-amber-dim:   rgba(154, 94, 10, 0.10);
+
+  --c-blue:        #2054C0;
+  --c-blue-dim:    rgba(32, 84, 192, 0.10);
+
+  --c-text:        #1A1612;     /* casi negro cálido */
+  --c-text-2:      #6A6158;     /* gris cálido medio */
+  --c-text-3:      #B0A89E;     /* gris cálido claro */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-outfit);
+  --font-display: var(--font-cormorant);
+  --font-mono: var(--font-jetbrains);
+
+  --color-app-bg: var(--c-bg);
+  --color-app-surface: var(--c-surface);
+  --color-app-surface-2: var(--c-surface-2);
+  --color-app-border: var(--c-border);
+  --color-app-border-2: var(--c-border-2);
+  --color-app-gold: var(--c-gold);
+  --color-app-teal: var(--c-teal);
+  --color-app-red: var(--c-red);
+  --color-app-amber: var(--c-amber);
+  --color-app-blue: var(--c-blue);
+  --color-app-text: var(--c-text);
+  --color-app-text-2: var(--c-text-2);
+  --color-app-text-3: var(--c-text-3);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+/* Smooth theme transition */
+body,
+.input-field {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+html, body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--font-sans, 'Outfit', sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--c-border-2);
+  border-radius: 2px;
+}
+
+.font-display {
+  font-family: var(--font-display, 'Cormorant Garant', serif);
+}
+
+.font-fin {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Animations */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes bar-grow {
+  from { width: 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out both;
+}
+
+/* Glow focus ring */
+.input-field {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid var(--c-border);
+  background: var(--c-surface-2);
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--c-text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input-field::placeholder {
+  color: var(--c-text-3);
+}
+.input-field:focus {
+  border-color: var(--c-gold);
+  box-shadow: 0 0 0 3px var(--c-gold-dim);
+}
+/* Input with currency prefix symbol */
+.input-field.has-prefix {
+  padding-left: 30px;
+}
+
+/* Progress bar glow */
+.bar-gold  { background: linear-gradient(90deg, var(--c-gold), color-mix(in srgb, var(--c-gold) 80%, white)); }
+.bar-teal  { background: linear-gradient(90deg, var(--c-teal), color-mix(in srgb, var(--c-teal) 80%, white)); }
+.bar-amber { background: linear-gradient(90deg, var(--c-amber), color-mix(in srgb, var(--c-amber) 80%, white)); }
+.bar-blue  { background: linear-gradient(90deg, var(--c-blue), color-mix(in srgb, var(--c-blue) 80%, white)); }
+.bar-red   { background: linear-gradient(90deg, var(--c-red), color-mix(in srgb, var(--c-red) 80%, white)); }
+
+/* ── Login intro animations ───────────────────────────────── */
+
+@keyframes draw-circle {
+  from { stroke-dashoffset: 195; }
+  to   { stroke-dashoffset: 0;   }
+}
+@keyframes bar-v-grow {
+  from { transform: scaleY(0); opacity: 0; }
+  to   { transform: scaleY(1); opacity: 1; }
+}
+@keyframes bar-h-grow {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 1; }
+}
+@keyframes kolon-in {
+  from { opacity: 0; letter-spacing: 0.55em; filter: blur(10px); transform: translateY(6px); }
+  to   { opacity: 1; letter-spacing: 0.16em; filter: blur(0px);  transform: translateY(0);   }
+}
+@keyframes line-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+@keyframes intro-exit {
+  0%   { opacity: 1; transform: scale(1);    filter: blur(0px);  }
+  35%  { opacity: 1; transform: scale(1.03); filter: blur(0px);  }
+  100% { opacity: 0; transform: scale(1.07); filter: blur(12px); }
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1);    }
+  50%       { opacity: 1;   transform: scale(1.15); }
+}
+
+/* ── Intro element classes (estado inicial explícito) ──────── */
+
+/* El círculo empieza invisible via stroke-dashoffset en CSS */
+.intro-circle {
+  stroke-dasharray: 195;
+  stroke-dashoffset: 195;
+  animation: draw-circle 1.05s cubic-bezier(0.4, 0, 0.2, 1) 0.25s forwards;
+}
+.intro-bar-v {
+  opacity: 0;
+  transform-origin: 32px 32px;
+  animation: bar-v-grow 0.4s cubic-bezier(0.16, 1, 0.3, 1) 1.05s forwards;
+}
+.intro-bar-h1 {
+  opacity: 0;
+  transform-origin: 32px 27px;
+  animation: bar-h-grow 0.38s cubic-bezier(0.16, 1, 0.3, 1) 1.28s forwards;
+}
+.intro-bar-h2 {
+  opacity: 0;
+  transform-origin: 32px 37px;
+  animation: bar-h-grow 0.38s cubic-bezier(0.16, 1, 0.3, 1) 1.46s forwards;
+}
+.intro-word {
+  opacity: 0;
+  animation: kolon-in 0.65s cubic-bezier(0.16, 1, 0.3, 1) 1.55s forwards;
+}
+.intro-tagline {
+  opacity: 0;
+  animation: line-in 0.5s ease-out 2.05s forwards;
+}
+.intro-hint {
+  opacity: 0;
+  animation: line-in 0.4s ease-out 2.3s forwards;
+}
+.intro-glow {
+  animation: glow-pulse 2.8s ease-in-out 0.8s infinite;
+}
+.intro-exit {
+  animation: intro-exit 0.55s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+  pointer-events: none;
+}
+
+/* Hide number input spinners */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Bottom nav safe area */
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
 }
