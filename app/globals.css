@@ -83,16 +83,42 @@ body,
     border-color 0.25s ease;
 }
 
-html, body {
+html {
   height: 100%;
+  /* iOS Safari: use fill-available so the viewport excludes browser chrome */
+  height: -webkit-fill-available;
 }
 
 body {
+  height: 100%;
+  /* Fallback for browsers that don't support dvh */
+  height: -webkit-fill-available;
+  /* Prevent the body itself from scrolling — only .app-scroll should scroll */
+  overflow: hidden;
+  overscroll-behavior: none;
   background: var(--c-bg);
   color: var(--c-text);
   font-family: var(--font-sans, 'Outfit', sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* App shell: fills the real visible viewport, including dvh for iOS */
+.app-shell {
+  height: 100vh;
+  height: 100dvh; /* dynamic viewport height — hides/shows with browser chrome */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* The only scrollable region in the app */
+.app-scroll {
+  flex: 1;
+  min-height: 0; /* CRITICAL: without this, flex items won't shrink below content size */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 ::-webkit-scrollbar {

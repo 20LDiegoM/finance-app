@@ -36,9 +36,9 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${outfit.variable} ${cormorant.variable} ${jetbrains.variable} h-full antialiased`}
+      className={`${outfit.variable} ${cormorant.variable} ${jetbrains.variable}`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

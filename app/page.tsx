@@ -60,7 +60,7 @@ export default function Home() {
 
   if (data.loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-app-bg">
+      <div className="app-shell items-center justify-center bg-app-bg flex">
         <div className="flex flex-col items-center gap-5">
           <div className="relative w-14 h-14">
             {/* KOLŌN mark */}
@@ -83,9 +83,9 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-app-bg flex flex-col">
+    <div className="app-shell bg-app-bg">
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-app-bg/90 backdrop-blur-md border-b border-app-border">
+      <header className="shrink-0 z-30 bg-app-bg/90 backdrop-blur-md border-b border-app-border">
         <div className="mx-auto max-w-lg px-4 flex items-center justify-between h-14">
           <div className="flex items-center gap-2.5">
             {/* KOLŌN mark — small */}
@@ -124,7 +124,7 @@ export default function Home() {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto pb-24">
+      <main className="app-scroll pb-24">
         <div className="mx-auto max-w-lg px-4 py-5">
           {tab === 'gastos'      && <TabGastos data={data} />}
           {tab === 'presupuesto' && <TabPresupuesto data={data} />}

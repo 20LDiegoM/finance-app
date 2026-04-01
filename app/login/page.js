@@ -65,7 +65,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-app-bg px-4 relative overflow-hidden">
+    <div className="app-shell items-center justify-center bg-app-bg px-4 relative overflow-hidden flex">
 
       {/* ── Intro splash overlay ─────────────────────────────── */}
       {introPhase !== 'done' && (
